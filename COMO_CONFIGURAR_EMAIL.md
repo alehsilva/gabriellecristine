@@ -39,7 +39,7 @@ RESEND_API_KEY=re_sua_chave_aqui
 ### 4. Atualizar Código da API
 
 Substitua o conteúdo de `app/api/contact/route.ts` pelo conteúdo do arquivo:
-📄 `docs-route-with-resend.example.ts`
+📄 `docs-route-with-resend.example.txt`
 
 Ou copie e cole este código:
 
@@ -129,4 +129,4 @@ Na Vercel, veja os logs:
 
 ---
 
-**Arquivo de exemplo:** [docs-route-with-resend.example.ts](docs-route-with-resend.example.ts)
+**Arquivo de exemplo:** [docs-route-with-resend.example.txt](docs-route-with-resend.example.txt)

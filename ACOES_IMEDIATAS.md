@@ -102,7 +102,7 @@ Atualmente ele apenas:
    git commit -m "feat: adiciona Resend para envio de emails"
    git push
    ```
-5. Substitua `/app/api/contact/route.ts` pelo conteúdo de `docs-route-with-resend.example.ts`
+5. Substitua `/app/api/contact/route.ts` pelo conteúdo de `docs-route-with-resend.example.txt`
    (Veja guia completo em [COMO_CONFIGURAR_EMAIL.md](COMO_CONFIGURAR_EMAIL.md))
 
 ## 🔒 Nível de Segurança Atual
