@@ -44,7 +44,7 @@ export default function About() {
           </div>
 
           {/* Right Column - Content and Credentials */}
-          <div className="flex gap-6 lg:gap-8">
+          <div className="flex flex-col md:flex-row gap-6 lg:gap-8">
             {/* Text Content */}
             <div className="flex-1 space-y-6 pt-0 max-w-[500px]">
               <h2 className="text-[2.5rem] lg:text-[2.65rem] text-primary-400 leading-[1.15] font-light">
@@ -83,7 +83,7 @@ export default function About() {
             <div className="hidden md:block w-px bg-primary-200/40 self-stretch my-2"></div>
 
             {/* Credentials Cards */}
-            <div className="space-y-4 pt-20 md:w-[240px] lg:w-[260px]">
+            <div className="space-y-4 pt-6 md:pt-20 md:w-[240px] lg:w-[260px]">
               {credentials.map((cred, index) => {
                 const Icon = cred.icon;
                 return (
