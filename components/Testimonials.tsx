@@ -82,7 +82,7 @@ export default function Testimonials() {
                   <p className="text-gray-600 leading-relaxed text-xs">
                     Atendimento 100% ético e sigiloso, conforme o Código de Ética Profissional do Psicólogo.
                   </p>
-                  <p className="text-sm text-gray-700 font-medium pt-2">CRP 06/123456</p>
+                  <p className="text-sm text-gray-700 font-medium pt-2">CRP 08/44356</p>
                 </div>
               </div>
             </div>
