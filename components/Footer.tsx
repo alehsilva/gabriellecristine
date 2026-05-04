@@ -110,7 +110,7 @@ export default function Footer() {
                 })}
               </div>
               <Link
-                href="#"
+                href="/privacidade"
                 className="flex items-center space-x-2 text-sm text-gray-600 hover:text-primary-400 transition-colors"
               >
                 <Lock className="w-4 h-4" />

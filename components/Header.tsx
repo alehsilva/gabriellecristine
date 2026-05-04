@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MessageCircle } from "lucide-react";
+import { trackWhatsAppClick } from "@/lib/fbPixel";
 
 export default function Header() {
   return (
@@ -46,13 +47,14 @@ export default function Header() {
 
           {/* CTA Button */}
           <Link
-            href="https://wa.me/5541998821250"
+            href="https://wa.me/5541998821250?text=Olá%2C%20Gabrielle!%20Vi%20seu%20site%20e%20gostaria%20de%20conversar%20sobre%20terapia.%20Pode%20me%20ajudar%3F"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackWhatsAppClick()}
             className="flex items-center space-x-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-2.5 rounded-full text-sm font-medium transition-colors"
           >
             <MessageCircle className="w-4 h-4" />
-            <span>Agendar sessão</span>
+            <span>Fale comigo</span>
           </Link>
         </div>
       </div>

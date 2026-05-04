@@ -3,12 +3,18 @@
 import { MessageCircle, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { trackWhatsAppClick } from "@/lib/fbPixel";
 
 export default function WhatsAppButton() {
   const [isOpen, setIsOpen] = useState(false);
 
   const whatsappNumber = "5541998821250";
-  const message = "Olá! Gostaria de agendar uma sessão.";
+  const message = "Olá, Gabrielle! Vi seu site e gostaria de conversar sobre terapia. Pode me ajudar?";
+
+  const handleWhatsAppClick = () => {
+    trackWhatsAppClick();
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -37,7 +43,7 @@ export default function WhatsAppButton() {
               </div>
               
               <p className="text-sm text-gray-600 leading-relaxed">
-                Olá! 👋 Como posso te ajudar? Estou disponível para conversar sobre terapia e agendar sua primeira sessão.
+                Olá! 👋 Que bom ter você aqui. Estou disponível para conversar sobre como a terapia pode te ajudar neste momento.
               </p>
               
               <Link
@@ -45,9 +51,9 @@ export default function WhatsAppButton() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full bg-green-500 hover:bg-green-600 text-white text-center px-6 py-3 rounded-full font-medium transition-colors"
-                onClick={() => setIsOpen(false)}
+                onClick={handleWhatsAppClick}
               >
-                Iniciar conversa
+                Iniciar conversa no WhatsApp
               </Link>
             </div>
           </div>

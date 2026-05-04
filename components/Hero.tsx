@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MessageCircle, Users } from "lucide-react";
+import { trackWhatsAppClick } from "@/lib/fbPixel";
 
 export default function Hero() {
   return (
@@ -70,13 +71,14 @@ export default function Hero() {
 
             <div className="pt-2">
               <Link
-                href="https://wa.me/5541998821250"
+                href="https://wa.me/5541998821250?text=Olá%2C%20Gabrielle!%20Vi%20seu%20site%20e%20gostaria%20de%20conversar%20sobre%20terapia.%20Pode%20me%20ajudar%3F"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackWhatsAppClick()}
                 className="inline-flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white px-7 py-3.5 rounded-full text-sm md:text-base font-medium transition-all shadow-md hover:shadow-lg"
               >
                 <MessageCircle className="w-5 h-5" fill="currentColor" />
-                <span>Agendar minha primeira sessão</span>
+                <span>Conversar no WhatsApp</span>
               </Link>
             </div>
 

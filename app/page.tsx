@@ -6,6 +6,7 @@ import HowItWorks from "@/components/HowItWorks";
 import TherapeuticApproach from "@/components/TherapeuticApproach";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
+import Contact from "@/components/Contact";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -21,6 +22,7 @@ export default function Home() {
       <TherapeuticApproach />
       <Testimonials />
       <FAQ />
+      <Contact />
       <CTA />
       <Footer />
       <WhatsAppButton />

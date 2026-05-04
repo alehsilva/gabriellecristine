@@ -1,6 +1,9 @@
+"use client";
+
 import { MessageCircle } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { trackWhatsAppClick } from "@/lib/fbPixel";
 
 export default function CTA() {
   return (
@@ -29,13 +32,14 @@ export default function CTA() {
               {/* WhatsApp Button */}
               <div className="flex justify-center">
                 <Link
-                  href="https://wa.me/5541998821250?text=Olá! Gostaria de agendar uma sessão."
+                  href="https://wa.me/5541998821250?text=Olá%2C%20Gabrielle!%20Vi%20seu%20site%20e%20gostaria%20de%20dar%20o%20primeiro%20passo.%20Vamos%20conversar%3F"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackWhatsAppClick()}
                   className="inline-flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white px-8 py-3.5 rounded-full text-base font-medium transition-all shadow-md hover:shadow-lg"
                 >
                   <MessageCircle className="w-5 h-5" fill="currentColor" />
-                  <span>Quero começar agora</span>
+                  <span>Dar o primeiro passo</span>
                 </Link>
               </div>
 
