@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import Script from 'next/script';
 import { useConsent } from '@/lib/consent-context';
 
@@ -11,14 +11,54 @@ declare global {
   }
 }
 
+// Função para gerar event_id único para desduplicação
+function generateEventId(): string {
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+}
+
+// Função para enviar evento para o servidor (CAPI)
+async function sendServerEvent(
+  eventName: string, 
+  eventId: string, 
+  customData?: Record<string, any>
+): Promise<void> {
+  try {
+    await fetch('/api/facebook-capi', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        eventName,
+        eventId,
+        eventSourceUrl: window.location.href,
+        customData,
+      }),
+    });
+  } catch (error) {
+    console.error('Error sending server event:', error);
+  }
+}
+
 export default function FacebookPixel() {
   const { hasMarketingConsent } = useConsent();
   const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+  const initialPageViewSent = useRef(false);
 
   useEffect(() => {
     // Só dispara PageView se já tiver consentimento E o pixel já estiver carregado
     if (hasMarketingConsent && typeof window !== 'undefined' && window.fbq) {
-      window.fbq('track', 'PageView');
+      // Gerar event_id único para desduplicação
+      const eventId = generateEventId();
+      
+      // Enviar evento pelo navegador (com event_id)
+      window.fbq('track', 'PageView', {}, { eventID: eventId });
+      
+      // Enviar mesmo evento pelo servidor (CAPI) com o mesmo event_id
+      // Isso garante que o Facebook deduplique e conte como um único evento
+      sendServerEvent('PageView', eventId);
+      
+      initialPageViewSent.current = true;
     }
   }, [hasMarketingConsent]);
 
@@ -43,7 +83,6 @@ export default function FacebookPixel() {
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '${pixelId}');
-            fbq('track', 'PageView');
           `,
         }}
       />

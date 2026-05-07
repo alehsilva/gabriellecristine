@@ -7,6 +7,11 @@ import { Send, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { contactFormSchema, type ContactFormData } from "@/lib/validations/contactForm";
 import { trackLead, trackWhatsAppClick } from "@/lib/fbPixel";
 
+// Função para gerar event_id único para desduplicação
+function generateEventId(): string {
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+}
+
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
@@ -29,13 +34,26 @@ export default function ContactForm() {
     setSubmitStatus("idle");
 
     try {
-      // Enviar para API route segura
+      // Gerar event_id único para desduplicação entre navegador e servidor
+      const eventId = generateEventId();
+
+      // Disparar evento Lead no navegador ANTES de enviar para o servidor
+      // Isso garante que ambos os eventos (navegador e servidor) tenham o mesmo event_id
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'Lead', {}, { eventID: eventId });
+      }
+
+      // Enviar para API route segura (que também enviará para CAPI)
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          eventId, // Enviar o mesmo event_id para o servidor
+          eventSourceUrl: window.location.href, // URL da página para CAPI
+        }),
       });
 
       const result = await response.json();
@@ -43,9 +61,6 @@ export default function ContactForm() {
       if (!response.ok) {
         throw new Error(result.error || 'Erro ao enviar mensagem');
       }
-      
-      // Rastreia conversão no Meta Pixel
-      trackLead();
       
       setSubmitStatus("success");
       reset();

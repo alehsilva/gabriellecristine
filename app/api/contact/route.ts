@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { contactFormSchema } from '@/lib/validations/contactForm';
 import { z } from 'zod';
+import { 
+  sendFacebookCAPIEvent, 
+  extractFbpCookie, 
+  extractFbcParam 
+} from '@/lib/facebook-capi';
 
 // Rate limiting simples em memória (para produção, use Redis ou similar)
 const submissionTracker = new Map<string, number[]>();
@@ -43,6 +48,9 @@ export async function POST(request: NextRequest) {
     // 3. Validação com Zod (server-side)
     const validatedData = contactFormSchema.parse(body);
 
+    // Extrair event_id para desduplicação (enviado pelo cliente)
+    const eventId = body.eventId;
+
     // 4. Verificar honeypot (campo invisível para pegar bots)
     if (body.honeypot) {
       console.warn('Bot detectado via honeypot');
@@ -81,6 +89,45 @@ export async function POST(request: NextRequest) {
     //   subject: `Novo contato: ${sanitizedData.name}`,
     //   html: generateEmailTemplate(sanitizedData),
     // });
+
+    // 6. Enviar evento Lead para Facebook CAPI
+    // Isso aumenta a taxa de cobertura e melhora o tracking de conversões
+    try {
+      const userAgent = request.headers.get('user-agent') || undefined;
+      const cookieHeader = request.headers.get('cookie');
+      const referer = request.headers.get('referer') || body.eventSourceUrl || '';
+      
+      const fbp = extractFbpCookie(cookieHeader);
+      const fbc = extractFbcParam(referer, cookieHeader);
+
+      // Separar nome em primeiro e último
+      const nameParts = sanitizedData.name.split(' ');
+      const firstName = nameParts[0];
+      const lastName = nameParts.slice(1).join(' ') || firstName;
+
+      await sendFacebookCAPIEvent({
+        eventName: 'Lead',
+        eventId: eventId, // Usar o mesmo event_id do cliente para desduplicação
+        eventSourceUrl: referer,
+        userData: {
+          clientIpAddress: ip,
+          clientUserAgent: userAgent,
+          fbp,
+          fbc,
+          email: sanitizedData.email,
+          phone: sanitizedData.phone,
+          firstName,
+          lastName,
+        },
+        customData: {
+          content_category: 'contact_form',
+          preferred_contact: sanitizedData.preferredContact,
+        },
+      });
+    } catch (capiError) {
+      // Não falhar a requisição se CAPI falhar
+      console.error('Facebook CAPI error (non-blocking):', capiError);
+    }
 
     // 7. Retornar sucesso
     return NextResponse.json(
