@@ -12,7 +12,7 @@ export default function Hero() {
       <div className="absolute inset-0 md:left-auto md:w-[87%] lg:w-[85%]">
         <div className="absolute inset-0 md:clip-path-ellipse">
           <Image
-            src="/assets/hero.png"
+            src="/assets/new-hero.png"
             alt="Gabrielle Cristine - Psicóloga"
             fill
             priority
